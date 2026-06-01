@@ -1,0 +1,389 @@
+# Hospital management
+import random as r
+from email.message import EmailMessage
+import ssl
+import smtplib
+import mysql.connector as m
+from rich.console import Console
+from rich.table import Table
+import tkinter as tk
+
+mycon = m.connect(host='localhost', user='root', passwd='dpsbn', database='hospital')
+cursor = mycon.cursor()
+d = None
+mainList = []
+l = []
+now = 3
+while True:
+    mycon = m.connect(host='localhost', user='root', passwd='dpsbn', database='hospital')
+    cursor = mycon.cursor()
+    print("""Welcome to Guardian Hospital. Please pick your choice.
+1 Register
+2 Login
+3 Admin
+4 Exit""")
+    cho = input('Enter choice:')
+    if cho == '1':
+        mycon = m.connect(host='localhost', user='root', passwd='dpsbn', database='hospital')
+        cursor = mycon.cursor()
+        name = input("Enter your name:")
+        age = int(input("Enter age:"))
+        mail = input("Enter your mail id:")
+        date = input("Enter date for appointment in YYYY-MM-DD:")
+        time = input("Enter time(eg. 7:00):")
+        am_pm = input("AM or PM?")
+        for i in range(1):
+            g = input("Enter gender (in M/F format):")
+            if g.lower() == 'female':
+                gen = 'F'
+            elif g.lower() == "male":
+                gen = 'M'
+
+        add = input("Enter address:")
+
+        id = int(r.random() * 1000)
+        while now > 1:
+            if id not in l:
+                l.append(id)
+                now = 0
+            else:
+                id = int(r.random() * 1000)
+                now = 3
+
+        print('''Please pick your choice
+                                a Visit a doctor
+                                b Vaccinations
+                                c Tests''')
+        choice = input("Enter your choice:")
+        if choice == 'a':
+            print('''Choose the speciality:
+                                    1 Physician
+                                    2 Pediatrician
+                                    3 Dermatologist''')
+            choice1 = input("Enter your choice:")
+            if choice1 == "1":
+                d = "Physician"
+                mainList.append(
+                    {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                     "Consult": "Physician"})
+            elif choice1 == "2":
+                d = "Pediatrician"
+                mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                 "Consult": "Pediatrician"})
+            elif choice1 == "3":
+                d = "Dermatologist"
+                mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                 "Consult": "Dermatologist"})
+            else:
+                mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                 "Consult": "Option not found"})
+
+        if choice == 'b':
+            print('''Choose vaccine category 
+                                    1. Child vaccine
+                                    2. Adult vaccine
+                                    3. Covid-19 vaccine''')
+
+            choice2 = input("Enter the SNO. of your choice:")
+            if choice2 == "1":
+                print('''Choose vaccine :
+                                            i. Polio vaccine
+                                            ii. DPT vaccine
+                                            iii. Influenza vaccine''')
+                opt = input("enter the SNO. of your choice:")
+                if opt == "i":
+                    d = "Polio"
+                    mainList.append(
+                        {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                         "Vaccine": "Polio"})
+                elif opt == "ii":
+                    d = "DPT"
+                    mainList.append(
+                        {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                         "Vaccine": "DPT"})
+                elif opt == "iii":
+                    d = "Influenza"
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Influenza"})
+                else:
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Option not found"})
+            elif choice2 == "2":
+                print('''Choose vaccine :
+                                                    i. Meningococcal vaccine
+                                                    ii. HPV vaccine
+                                                    iii. Tdap vaccine''')
+                opt = input("enter the SNO. of your choice:")
+                if opt == "i":
+                    d = "Meningoccal"
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Meningoccal"})
+                elif opt == "ii":
+                    d = "HPV"
+                    mainList.append(
+                        {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                         "Vaccine": "HPV"})
+                elif opt == "iii":
+                    d = "Tdap"
+                    mainList.append(
+                        {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                         "Vaccine": "Tdap"})
+                else:
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Option not found"})
+
+            elif choice2 == "3":
+                print('''Choose vaccine :
+                                                    i. Covaxin vaccine
+                                                    ii. Sputnik vaccine
+                                                    iii. COVAVAX vaccine''')
+                opt = input("enter the SNO. of your choice:")
+                if opt == "i":
+                    d = 'Covaxin'
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Covaxin"})
+                elif opt == "ii":
+                    d = "Sputnik"
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Sputnik"})
+                elif opt == "iii":
+                    d = "COVAVAX"
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "COVAVAX"})
+                else:
+                    mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                     "Vaccine": "Option not found"})
+
+        if choice == "c":
+            print("""Choose test:
+                                1 Blood Test
+                                2 X-Ray
+                                3 MRI""")
+            choice3 = input("Enter choice:")
+            if choice3 == "1":
+                d = "Blood Test"
+                mainList.append(
+                    {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                     "Test": "Blood Test"})
+            elif choice3 == "2":
+                d = "X-Ray"
+                mainList.append(
+                    {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                     "Test": "X-Ray"})
+            elif choice3 == "3":
+                d = "MRI"
+                mainList.append(
+                    {"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add, "Test": "MRI"})
+            else:
+                mainList.append({"Name": name, "Age": age, "Mail": mail, "Id": id, "Gender": g, "Address": add,
+                                 "Test": "Option not found"})
+        query = "insert into entries values({},'{}',{},'{}','{}','{}','{}','{}','{}')".format(id, name, age, g, add,
+                                                                                              mail, d, date, time)
+        cursor.execute(query)
+        mycon.commit()
+
+        senderemail = "guardianhospital20@gmail.com"
+        password = "khyk vsfi bdrr tnqa"
+        receiver_email = [mail]
+        subject = "Confirmation email from Guardian Community Hospital"
+        body = """,this is Guardian Community Hospital.
+                                Your appointment has been registered.
+                                Please visit from timings: 9 a.m to 7 p.m.
+                                Thank you for availing our services."""
+        body1 = str("Dear" + " " + name)
+        body2 = str("\n" + "YOUR ID=" + str(id))
+        em = EmailMessage()
+        em["From"] = senderemail
+        em["To"] = receiver_email
+        em["subject"] = subject
+        em.set_content(body1 + body + body2)
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+            smtp.login(senderemail, password)
+            smtp.sendmail(senderemail, receiver_email, em.as_string())
+        from rich.progress import track
+        from time import sleep
+
+
+        def process_data():
+            sleep(0.02)
+
+
+        for _ in track(range(100), description='[green]Processing data'):
+            process_data()
+        print("Kindly check your mail for a confirmation message.")
+
+
+        for i in mainList:
+            for j in i:
+                print(j, ":", i[j])
+
+
+
+    elif cho == '2':
+        import tkinter as tk
+        import mysql.connector as m
+
+        mycon = m.connect(host='localhost', user='root', passwd='dpsbn', database='hospital')
+        cursor = mycon.cursor()
+
+
+        def fetch_details():
+            user_id = entry_id.get()
+            # Fetch user details based on the entered ID
+            cursor.execute("SELECT * FROM entries WHERE id={}".format(user_id, ))
+            user_data = cursor.fetchone()
+
+            if user_data:
+                name = user_data[1]
+                age = user_data[2]
+                gender = user_data[3]
+                consult = user_data[6]
+                entry_name.delete(0, tk.END)
+                entry_age.delete(0, tk.END)
+                entry_gender.delete(0, tk.END)
+
+                entry_name.insert(0, name)
+                entry_age.insert(0, age)
+                entry_gender.insert(0, gender)
+                entry_consult.insert(0, consult)
+                print("Logged in successfully.")
+                print("""Menu
+                        1 Doctor details
+                        2 Date and time of appointment
+                        3 Cancel appointment""")
+                ch = input("Enter your choice:")
+                if ch == '1':
+                    con = m.connect(host="localhost", user="root", passwd="dpsbn", database="hospital")
+                    cur = con.cursor()
+
+                    cur.execute('select * from doctor')
+                    a = cur.fetchall()
+
+                    table = Table(title="Doctor details")
+                    table.add_column("ID", justify="right", style="cyan", no_wrap=True)
+                    table.add_column("Name", style="magenta")
+                    table.add_column("Department", justify="right", style="green")
+                    table.add_column("Degree", justify="right", style="red")
+                    s = 0
+                    for i in a:
+                        table.add_row(str(a[s][0]), str(a[s][1]), str(a[s][2]), str(a[s][3]))
+                        s = s + 1
+                    console = Console()
+                    console.print(table)
+                    con.close()
+
+                elif ch == '2':
+                    connection = m.connect(host="localhost", user="root", passwd="dpsbn", database="hospital")
+                    curs = connection.cursor()
+                    query = "select id,name,date,time from entries where id={}".format(int(user_id))
+                    curs.execute(query)
+                    data = curs.fetchall()
+                    table = Table(title="Date and time details")
+                    table.add_column("ID", justify="right", style="cyan", no_wrap=True)
+                    table.add_column("Date", style="red")
+                    table.add_column("Date", style="magenta")
+                    table.add_column("Time", justify="right", style="green")
+
+                    table.add_row(str(data[0][0]), str(data[0][1]), str(data[0][2]), str(data[0][3]))
+                    console = Console()
+                    console.print(table)
+                    connection.close()
+                elif ch == '3':
+                    conn = connection = m.connect(host="localhost", user="root", passwd="dpsbn", database="hospital")
+                    curso = connection.cursor()
+                    query = "delete from entries where id={}".format(int(user_id))
+                    curso.execute(query)
+                    conn.commit()
+                    conn.close()
+                    print("Appointment has been cancelled.")
+                else:
+                    print("Invalid choice.")
+
+
+            else:
+                print("User not found")
+
+            mycon.close()
+
+
+        root = tk.Tk()
+        root.title("User Details")
+
+
+        def close_window():
+            root.destroy()  # Close the window
+
+        label_id = tk.Label(root, text="Enter ID:")
+        label_id.grid(row=0, column=0, padx=10, pady=5,fg="White")
+
+        entry_id = tk.Entry(root)
+        entry_id.grid(row=0, column=1, padx=10, pady=5)
+
+        fetch_button = tk.Button(root, text="Fetch Details", command=fetch_details)
+        fetch_button.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
+
+        label_name = tk.Label(root, text="Name:")
+        label_name.grid(row=2, column=0, padx=10, pady=5)
+        label_age = tk.Label(root, text="Age:")
+        label_age.grid(row=3, column=0, padx=10, pady=5)
+        label_gender = tk.Label(root, text="Gender:")
+        label_gender.grid(row=4, column=0, padx=10, pady=5)
+        label_consult = tk.Label(root, text="Consulation")
+        label_consult.grid(row=5, column=0, padx=10, pady=5)
+
+        entry_name = tk.Entry(root)
+        entry_name.grid(row=2, column=1, padx=10, pady=5)
+        entry_age = tk.Entry(root)
+        entry_age.grid(row=3, column=1, padx=10, pady=5)
+        entry_gender = tk.Entry(root)
+        entry_gender.grid(row=4, column=1, padx=10, pady=5)
+        entry_consult = tk.Entry(root)
+        entry_consult.grid(row=5, column=1, padx=10, pady=5)
+
+        close_button = tk.Button(root, text="Close Tab", command=close_window)
+        close_button.grid(row=6, column=0, columnspan=2, padx=10, pady=5)
+
+
+        root.mainloop()
+
+    elif cho == '3':
+        password = input('Enter the password:')
+        if password == "abc#@":
+            mycon=m.connect(host="localhost", user="root", passwd="dpsbn", database="hospital")
+            cursor=mycon.cursor()
+            cursor.execute('select * from entries')
+            from rich.console import Console
+            from rich.table import Table
+
+            table = Table(title="Patient details")
+            table.add_column("ID", justify="right", style="cyan", no_wrap=True)
+            table.add_column("Name", style="magenta")
+            table.add_column("Age", justify="right", style="green")
+            table.add_column("Gender", justify="right", style="red")
+            table.add_column("Address", justify="right", style="cyan")
+            table.add_column("Mail", justify="right", style="magenta")
+            table.add_column("Consult", justify="right", style="green")
+            data = cursor.fetchall()
+            s = 0
+            for i in data:
+                table.add_row(str(data[s][0]), str(data[s][1]), str(data[s][2]), str(data[s][3]), str(data[s][4]),
+                              str(data[s][5]), str(data[s][6]))
+                s = s + 1
+            console = Console()
+            console.print(table)
+            mycon.close()
+        else:
+            print("Wrong password. Try again")
+    elif cho == '4':
+        print('Thank you for visiting guardian hospital.')
+        break
+    else:
+        print("Invalid choice.")
+
+
+
+
+
+
+
